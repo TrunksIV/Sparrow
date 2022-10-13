@@ -68,12 +68,6 @@ public class User implements UserDetails {
             unique = true
     )
     private String password;
-    @Column(
-            name = "username",
-            nullable = false,
-            unique = true
-    )
-    private String username;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "organisation_orgId",referencedColumnName = "orgId")
@@ -85,6 +79,18 @@ public class User implements UserDetails {
             nullable = false
     )
     private boolean active;
+
+    public User(String firstName, String lastName, String address, String email, String phone, String password, Organisation organisation, Roles roles, boolean active) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.address = address;
+        this.email = email;
+        this.phone = phone;
+        this.password = password;
+        this.organisation = organisation;
+        this.roles = roles;
+        this.active = active;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -98,7 +104,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return username;
+        return email;
     }
 
     @Override
