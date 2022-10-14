@@ -80,14 +80,13 @@ public class User implements UserDetails {
     )
     private boolean active;
 
-    public User(String firstName, String lastName, String address, String email, String phone, String password, Organisation organisation, Roles roles, boolean active) {
+    public User(String firstName, String lastName, String address, String email, String phone, String password, Roles roles, boolean active) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
         this.email = email;
         this.phone = phone;
         this.password = password;
-        this.organisation = organisation;
         this.roles = roles;
         this.active = active;
     }

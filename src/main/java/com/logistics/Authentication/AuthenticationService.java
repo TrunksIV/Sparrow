@@ -31,9 +31,9 @@ public class AuthenticationService {
         }
 
 //        Get Organisation
-        Organisation org = organisationDTO.findById(id).get();
-        System.out.println("The Org is "+org.getName());
-        String user = userService.signUpUser(
+
+        Object user = userService.signUpUser(
+                id,
                 new User(
                         authentication.getFirstName(),
                         authentication.getLastName(),
@@ -41,11 +41,10 @@ public class AuthenticationService {
                         authentication.getEmail(),
                         authentication.getPhone(),
                         authentication.getPassword(),
-                        org,
                         Roles.ADMIN,
                         true
                 )
         );
-        return ResponseEntity.ok("It works");
+        return ResponseEntity.ok(user);
     }
 }

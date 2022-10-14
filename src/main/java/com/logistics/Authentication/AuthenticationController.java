@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 public class AuthenticationController {
 
     private AuthenticationService authenticationService;
-    @PostMapping("/{id}")
+    @PostMapping("/{orgId}")
     public ResponseEntity<?> registerUser(@PathVariable Long orgId, @RequestBody Authentication authentication){
     return authenticationService.register(orgId, authentication);
     }

@@ -1,5 +1,8 @@
 package com.logistics.Users;
 
+import com.logistics.Helpers.CustomResponse;
+import com.logistics.Organisations.Organisation;
+import com.logistics.Organisations.OrganisationDTO;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -14,6 +17,7 @@ public class UserService implements UserDetailsService {
     private final static  String USER_EXIST ="Email %s is already taken";
 
     private final UserDTO userDTO;
+    private final OrganisationDTO organisationDTO;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
@@ -25,15 +29,29 @@ public class UserService implements UserDetailsService {
                 );
     }
 
-    public String signUpUser(User user){
-        boolean userExist = userDTO.findByEmail(user.getEmail()).isPresent();
-        if(userExist){
-            throw new IllegalStateException(String.format(USER_EXIST,user.getEmail()));
+    public Object signUpUser(Long id,User user){
+        CustomResponse response = new CustomResponse();
+        try {
+            boolean userExist = userDTO.findByEmail(user.getEmail()).isPresent();
+            if(userExist){
+                response.setResponse(0);
+                response.setMessage(String.format(USER_EXIST,user.getEmail()));
+            }else {
+                Organisation org = organisationDTO.findById(id).get();
+                String encodedPassword = bCryptPasswordEncoder.encode(user.getPassword());
+
+                user.setPassword(encodedPassword);
+                user.setOrganisation(org);
+                userDTO.save(user);
+
+                response.setResponse(1);
+                response.setMessage("User successfully created");
+            }
+        }catch (Exception ex){
+            response.setResponse(0);
+            response.setMessage("Something went wrong");
         }
-        String encodedPassword = bCryptPasswordEncoder.encode(user.getPassword());
-        user.setPassword(encodedPassword);
-        userDTO.save(user);
-        return "Created Successfully";
+        return response;
     }
 
 }
